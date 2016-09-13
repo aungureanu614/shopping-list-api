@@ -11,7 +11,7 @@ var Storage = {
                 this.items.push(item);
                 this.setId += 1;
          
-        //return item;
+        return item;
         
     },
   
@@ -70,15 +70,6 @@ var createStorage = function() {
 
 var storage = createStorage();
 
-/*var User = function(username){
-    this.username = username;
-}
-
-
-var User1 = new User('Tim');
-var User2 = new User('Jenny');
-var User3 = new User('Dora')
-*/
 
 storage.add('Tim', 'Broad beans');
 storage.add('Jenny', 'Tomatoes');
@@ -100,6 +91,7 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 app.post('/items', jsonParser, function(request, response) {
+    
     if (!('name' in request.body)) {
         return response.sendStatus(400);
     }
