@@ -2,19 +2,19 @@ var express = require('express');
 
 var Storage = {
     add: function(username, names) {
-           
-           this.username = username;
-          
-                
-                var item ={username: username, name:names, id: this.setId};
-                
-                this.items.push(item);
-                this.setId += 1;
-         
+
+        this.username = username;
+
+
+        var item = { username: username, name: names, id: this.setId };
+
+        this.items.push(item);
+        this.setId += 1;
+
         return item;
-        
+
     },
-  
+
     remove: function(targetId) {
         var targetIndex = this.items.findIndex(function(item) {
             return item.id === targetId;
@@ -43,22 +43,22 @@ var Storage = {
         }
 
     },
-    findUser: function(name){
+    findUser: function(name) {
         var addedItems = [];
         var targetUser = this.items.filter(function(item) {
             return item.username === name;
         });
-        
-            for(var i=0;i<targetUser.length;i++){
-                addedItems.push({name: targetUser[i].name, id: targetUser[i].id});
-                var userItems = {username:targetUser[i].username, items:addedItems};
-                
-            }
-           
-             return userItems;
-        
+
+        for (var i = 0; i < targetUser.length; i++) {
+            addedItems.push({ name: targetUser[i].name, id: targetUser[i].id });
+            var userItems = { username: targetUser[i].username, items: addedItems };
+
+        }
+
+        return userItems;
+
     }
-   
+
 }
 
 var createStorage = function() {
@@ -91,7 +91,7 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 app.post('/items', jsonParser, function(request, response) {
-    
+
     if (!('name' in request.body)) {
         return response.sendStatus(400);
     }
@@ -129,12 +129,12 @@ app.put('/items/:id', jsonParser, function(request, response) {
 
 });
 
-app.get('/items/:username', jsonParser, function(request, response){
+app.get('/items/:username', jsonParser, function(request, response) {
     var user = request.params.username;
-    
+
     var getUser = storage.findUser(user);
-  
+
     response.status(200).json(getUser);
-    
-    
+
+
 })
