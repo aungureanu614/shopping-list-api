@@ -1,12 +1,9 @@
 var express = require('express');
 
 var Storage = {
-    add: function(username, names) {
+    add: function(names) {
 
-        this.username = username;
-
-
-        var item = { username: username, name: names, id: this.setId };
+        var item = { name: names, id: this.setId };
 
         this.items.push(item);
         this.setId += 1;
@@ -71,12 +68,10 @@ var createStorage = function() {
 var storage = createStorage();
 
 
-storage.add('Tim', 'Broad beans');
-storage.add('Jenny', 'Tomatoes');
-storage.add('Dora', 'Peppers');
-storage.add('Tim', 'cookies');
-storage.add('Jenny', 'avocados');
-storage.add('Jenny', 'ham');
+storage.add( 'Broad beans');
+storage.add( 'Tomatoes');
+storage.add( 'Peppers');
+
 
 var app = express();
 app.use(express.static('public'));
@@ -85,7 +80,7 @@ app.get('/items', function(request, response) {
     response.json(storage.items);
 });
 
-app.listen(process.env.PORT || 8080, process.env.IP);
+
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
@@ -106,7 +101,7 @@ app.delete('/items/:id', function(request, response) {
     var remove = storage.remove(deleteID);
 
     if (remove === false) {
-        return response.sendStatus(404).json('item');
+        return response.sendStatus(404).json('item cannot be found');
     }
     response.status(200).json(remove);
 
@@ -116,7 +111,7 @@ app.put('/items/:id', jsonParser, function(request, response) {
     var editId = parseInt(request.params.id);
     var editedName = request.body.name;
 
-    if (request.body.id !== editId) {
+    if (!request.body.id) {
         return response.sendStatus(400);
     }
     var edit = storage.edit(editId, editedName)
@@ -138,3 +133,8 @@ app.get('/items/:username', jsonParser, function(request, response) {
 
 
 })
+
+app.listen(process.env.PORT || 8080, process.env.IP);
+
+exports.app = app; 
+exports.storage = storage;
